@@ -204,5 +204,99 @@
         displayUserInfo();
         loadPosts();
     </script>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        #updateButton {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        #updateButton.updating {
+            background-color: #0056b3;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Version</h1>
+        <button id="updateButton">Update Now</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('updateButton').addEventListener('click', function() {
+            const button = this;
+            const messageElement = document.getElementById('message');
+
+            button.classList.add('updating');
+            messageElement.textContent = 'Updating version... Please wait.';
+
+            // Simulate a 15-second update process
+            setTimeout(() => {
+                // Simulate server response
+                const username = localStorage.getItem('username');
+                if (username) {
+                    // Update local storage to reflect that the update was completed
+                    localStorage.setItem(`updated_${username}`, 'true');
+                    messageElement.textContent = `Your version is up to date (Paya 8.0.0).`;
+                } else {
+                    messageElement.textContent = 'User session not found.';
+                }
+
+                button.classList.remove('updating');
+            }, 15000); // 15 seconds
+        });
+
+        // Check if the user has already updated
+        function checkVersion() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                const updated = localStorage.getItem(`updated_${username}`);
+                if (updated) {
+                    document.getElementById('message').textContent = `Your version is up to date (Paya 8.0.0).`;
+                    document.getElementById('updateButton').disabled = true;
+                }
+            }
+        }
+
+        checkVersion();
+    </script>
+</body>
+</html>
+
 </body>
 </html>
