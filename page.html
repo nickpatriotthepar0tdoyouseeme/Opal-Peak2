@@ -14,6 +14,7 @@
             background-size: cover;
             background-position: center;
             color: #fff;
+            overflow: hidden; /* Prevent scrollbars */
         }
         .navbar {
             background-color: rgba(0, 0, 0, 0.7);
@@ -81,6 +82,7 @@
             font-size: 20px;
             position: absolute;
             top: 15px;
+           
             left: 15px;
         }
         .content {
@@ -91,6 +93,8 @@
             background: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
             margin-top: 60px;
+            position: relative; /* Ensure child elements are positioned relative to this */
+            z-index: 1; /* Ensure it appears above the update box */
         }
         .post-section {
             margin-bottom: 20px;
@@ -120,6 +124,64 @@
         .post-title {
             font-weight: bold;
         }
+        .update-box {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* Ensure it's below the post content box */
+            display: none; /* Initially hidden */
+        }
+        .update-box.active {
+            display: flex;
+        }
+        #updateButton {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        #updateButton.updating {
+            background-color: #0056b3;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .sidebar-button {
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .sidebar-button:hover {
+            background-color: #0056b3;
+        }
+        .user-details {
+            display: none; /* Initially hidden */
+            background: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -127,7 +189,7 @@
         <a href="market.html">Terminal</a>
         <a href="coupon.html">Redeem Center</a>
         <a href="https://tlk.io/opalpeak1" target="_blank">Chat</a>
-      <a href="gift center">gift</a>
+        <a href="gift_center.html">Gift</a>
     </div>
     <div id="sidebar" class="sidebar closed">
         <button class="menu-button" onclick="toggleSidebar()">☰</button>
@@ -139,6 +201,13 @@
                 <div id="credits">Credits: 20</div>
             </div>
         </div>
+        <button class="sidebar-button" onclick="toggleUserDetails()">Show User Details</button>
+        <div id="userDetails" class="user-details">
+            <div id="userName">Name: </div>
+            <div id="userRole">Role: </div>
+            <div id="profilePicDetail">Profile Picture: </div>
+            <div id="userTokens">Tokens: </div>
+        </div>
     </div>
     <div class="content">
         <h1>Welcome to the User Page</h1>
@@ -147,10 +216,20 @@
             <div class="post-area" id="postArea"></div>
         </div>
     </div>
+    <div id="updateBox" class="update-box">
+        <h1>Your version of Paya is outdated. Click to update.</h1>
+        <button id="updateButton">Update Now</button>
+        <div id="message"></div>
+    </div>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('closed');
+        }
+
+        function toggleUserDetails() {
+            const userDetails = document.getElementById('userDetails');
+            userDetails.style.display = userDetails.style.display === 'none' ? 'block' : 'none';
         }
 
         function displayUserInfo() {
@@ -201,63 +280,6 @@
 
         document.getElementById('postButton').addEventListener('click', addPost);
 
-        displayUserInfo();
-        loadPosts();
-    </script>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Version Update</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
-        }
-        #updateButton {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s, opacity 0.3s;
-        }
-        #updateButton.updating {
-            background-color: #0056b3;
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-        #message {
-            margin-top: 20px;
-            font-size: 16px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Update Version</h1>
-        <button id="updateButton">Update Now</button>
-        <div id="message"></div>
-    </div>
-
-    <script>
         document.getElementById('updateButton').addEventListener('click', function() {
             const button = this;
             const messageElement = document.getElementById('message');
@@ -289,14 +311,15 @@
                 if (updated) {
                     document.getElementById('message').textContent = `Your version is up to date (Paya 8.0.0).`;
                     document.getElementById('updateButton').disabled = true;
+                } else {
+                    document.getElementById('updateBox').classList.add('active');
                 }
             }
         }
 
         checkVersion();
+        displayUserInfo();
+        loadPosts();
     </script>
-</body>
-</html>
-
 </body>
 </html>
