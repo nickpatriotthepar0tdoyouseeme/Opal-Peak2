@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        .info-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .profile-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto;
+        }
+        .info-item {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-container">
+        <div id="profileCircle" class="profile-circle"></div>
+        <div id="userInfo" class="info-item"></div>
+        <div id="loginTime" class="info-item"></div>
+    </div>
+    <script>
+        function displayUserInfo() {
+            const username = localStorage.getItem('username');
+            const role = localStorage.getItem('role');
+            const loginTime = localStorage.getItem('lastLogin');
+            const profileCircle = document.getElementById('profileCircle');
+            const userInfoElement = document.getElementById('userInfo');
+            const loginTimeElement = document.getElementById('loginTime');
+
+            if (username && role && loginTime) {
+                profileCircle.textContent = username.charAt(0).toUpperCase();
+                userInfoElement.textContent = `@${username} (${role})`;
+                loginTimeElement.textContent = `Login Time: ${new Date(loginTime).toLocaleString()}`;
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+
+        displayUserInfo();
+    </script>
+</body>
+</html>
