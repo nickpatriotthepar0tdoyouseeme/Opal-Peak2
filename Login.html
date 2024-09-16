@@ -3,205 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Page</title>
+    <title>Login Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
             display: flex;
-            height: 100vh;
-            background-image: url('pic.jpg');
-            background-size: cover;
-            background-position: center;
-            color: #fff;
-        }
-        .navbar {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-        .navbar a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            position: fixed;
-            height: 100%;
-            top: 0;
-            left: 0;
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-        .sidebar.closed {
-            transform: translateX(-100%);
-        }
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile-pic {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #007bff;
-            color: white;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 20px;
-            margin-right: 15px;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-        .menu-button {
-            cursor: pointer;
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 20px;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-        }
-        .content {
-            margin-left: 250px;
+        .login-container {
+            background: #fff;
             padding: 20px;
-            flex: 1;
-            color: #fff;
-            background: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
-            margin-top: 60px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
         }
-        .post-section {
-            margin-bottom: 20px;
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-        .post-button {
+        input[type="button"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
             background-color: #007bff;
             color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
         }
-        .post-button:hover {
+        input[type="button"]:hover {
             background-color: #0056b3;
         }
-        .post-area {
+        .error {
+            color: red;
             margin-top: 10px;
-        }
-        .post {
-            background-color: #fff;
-            color: #000;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-        }
-        .post-title {
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="terminal.html">Terminal</a>
-        <a href="coupon.html">Redeem Center</a>
-        <a href="https://tlk.io/opalpeak1" target="_blank">Chat</a>
-    </div>
-    <div id="sidebar" class="sidebar closed">
-        <button class="menu-button" onclick="toggleSidebar()">☰</button>
-        <div class="sidebar-header">
-            <div id="profilePic" class="profile-pic"></div>
-            <div id="userInfo">
-                <div id="username"></div>
-                <div id="role"></div>
-                <div id="credits">Credits: 20</div>
-            </div>
-        </div>
-    </div>
-    <div class="content">
-        <h1>Welcome to the User Page</h1>
-        <div class="post-section">
-            <button class="post-button" id="postButton">Post Content</button>
-            <div class="post-area" id="postArea"></div>
-        </div>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <input type="button" value="Login" onclick="login()" />
+        <div id="error" class="error"></div>
     </div>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('closed');
-        }
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error');
+            const maxLoginAttempts = 5;
+            const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};
+            const now = new Date();
 
-        function displayUserInfo() {
-            const username = localStorage.getItem('username');
-            const role = localStorage.getItem('role');
-            const profilePic = document.getElementById('profilePic');
-            const userInfoElement = document.getElementById('userInfo');
-            const creditsElement = document.getElementById('credits');
+            const validCredentials = {
+                "nick": "3369",
+                "Mostafa": "19689",
+                "atefi": "1357",
+                "kasra": "1234"
+            };
 
-            if (username && role) {
-                profilePic.textContent = username.charAt(0).toUpperCase();
-                document.getElementById('username').textContent = `Username: ${username}`;
-                document.getElementById('role').textContent = `Role: ${role}`;
-                creditsElement.textContent = `Credits: ${role === 'admin' ? 50 : 20}`;
+            const userRole = {
+                "nick": "admin",
+                "Mostafa": "admin",
+                "kasra": "user",
+                "atefi": "user"
+            };
+
+            const userLastLogin = loginAttempts[username] ? new Date(loginAttempts[username]) : null;
+            const dailyLimitReset = userLastLogin && (now - userLastLogin) > 24 * 60 * 60 * 1000;
+
+            if (dailyLimitReset || !loginAttempts[username]) {
+                loginAttempts[username] = 0;
+            }
+
+            if (loginAttempts[username] >= maxLoginAttempts) {
+                errorElement.textContent = "Daily login attempt limit reached.";
+                return;
+            }
+
+            if (validCredentials[username] === password) {
+                loginAttempts[username]++;
+                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+                localStorage.setItem('username', username);
+                localStorage.setItem('role', userRole[username]);
+                localStorage.setItem('lastLogin', now.toISOString());
+                window.location.href = "page.html";
             } else {
-                window.location.href = "login.html";
+                errorElement.textContent = "Invalid username or password.";
+                loginAttempts[username] = (loginAttempts[username] || 0) + 1;
+                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
             }
         }
-
-        function loadPosts() {
-            const posts = JSON.parse(localStorage.getItem('posts')) || [];
-            const postArea = document.getElementById('postArea');
-            postArea.innerHTML = '';
-            posts.forEach(post => {
-                const postDiv = document.createElement('div');
-                postDiv.className = 'post';
-                postDiv.innerHTML = `<div class="post-title">${post.title}</div><div>${post.content}</div>`;
-                postArea.appendChild(postDiv);
-            });
-        }
-
-        function addPost() {
-            const username = localStorage.getItem('username');
-            const role = localStorage.getItem('role');
-            if (role === 'admin') {
-                const title = prompt('Enter post title:');
-                const content = prompt('Enter post content:');
-                if (title && content) {
-                    const posts = JSON.parse(localStorage.getItem('posts')) || [];
-                    posts.push({ title, content });
-                    localStorage.setItem('posts', JSON.stringify(posts));
-                    loadPosts();
-                }
-            } else {
-                alert('Only admins can post content.');
-            }
-        }
-
-        document.getElementById('postButton').addEventListener('click', addPost);
-
-        displayUserInfo();
-        loadPosts();
     </script>
 </body>
 </html>
