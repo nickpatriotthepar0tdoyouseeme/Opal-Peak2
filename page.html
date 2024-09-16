@@ -4,6 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Page</title>
+        <!DOCTYPE html>  
+    <html lang="en">  
+    <head>  
+        <meta charset="UTF-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+        <title>Login Page with Sidebar</title>  
+        <style>  
+            body {  
+                font-family: Arial, sans-serif;  
+                display: flex;  
+                justify-content: center;  
+                align-items: center;  
+                height: 100vh;  
+                margin: 0;  
+                background-color: #f0f0f0;  
+                position: relative;  
+            }  
+            .login-container {  
+                background: #fff;  
+                padding: 20px;  
+                border-radius: 8px;  
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+                width: 300px;  
+                text-align: center;  
+            }  
+            input[type="text"], input[type="password"] {  
+                width: calc(100% - 20px);  
+                padding: 10px;  
+                margin: 10px 0;  
+                border: 1px solid #ddd;  
+                border-radius: 4px;  
+            }  
+            input[type="button"] {  
+                padding: 10px 20px;  
+                border: none;  
+                border-radius: 4px;  
+                background-color: #007bff;  
+                color: #fff;  
+                cursor: pointer;  
+            }  
+            input[type="button"]:hover {  
+                background-color: #0056b3;  
+            }  
+            .error {  
+                color: red;  
+                margin-top: 10px;  
+            }  
+            .sidebar {  
+                position: absolute;  
+                top: 0;  
+                right: -250px;  
+                width: 250px;  
+                height: 100%;  
+                background: #fff;  
+                border-left: 1px solid #ddd;  
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+                transition: right 0.3s;  
+                padding: 20px;  
+                border-radius: 8px;  
+            }  
+            .sidebar.open {  
+                right: 0;  
+            }  
+            .toggle-sidebar {  
+                position: absolute;  
+                top: 20px;  
+                right: 20px;  
+                cursor: pointer;  
+                background: #007bff;  
+                color: white;  
+                border: none;  
+                padding: 10px;  
+                border-radius: 5px;  
+            }  
+        </style>  
+    </head>  
+    <body>  
+        <div class="login-container">  
+            <h2>Login</h2>  
+            <input type="text" id="username" placeholder="Username" />  
+            <input type="password" id="password" placeholder="Password" />  
+            <input type="button" value="Login" onclick="login()" />  
+            <div id="error" class="error"></div>  
+            <button class="toggle-sidebar" onclick="toggleSidebar()">Profile</button>  
+        </div>  
+        <div class="sidebar" id="sidebar">  
+            <h3>Profile</h3>  
+            <p><strong>Username:</strong> <span id="sidebar-username"></span></p>  
+            <p><strong>Password:</strong> <span id="sidebar-password"></span></p>  
+            <p><strong>Role:</strong> <span id="sidebar-role"></span></p>  
+        </div>  
+        <script>  
+            function login() {  
+                const username = document.getElementById('username').value;  
+                const password = document.getElementById('password').value;  
+                const errorElement = document.getElementById('error');  
+                const maxLoginAttempts = 5;  
+                const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};  
+                const now = new Date();  
+
+                const validCredentials = {  
+                    "nick": "3369",  
+                    "Mostafa": "19689",  
+                    "atefi": "1357",  
+                    "kasra": "1234"  
+                };  
+
+                const userRole = {  
+                    "nick": "admin",  
+                    "Mostafa": "admin",  
+                    "kasra": "user",  
+                    "atefi": "user"  
+                };  
+
+                const userLastLogin = loginAttempts[username] ? new Date(loginAttempts[username]) : null;  
+                const dailyLimitReset = userLastLogin && (now - userLastLogin) > 24 * 60 * 60 * 1000;  
+
+                if (dailyLimitReset || !loginAttempts[username]) {  
+                    loginAttempts[username] = 0;  
+                }  
+
+                if (loginAttempts[username] >= maxLoginAttempts) {  
+                    errorElement.textContent = "Daily login attempt limit reached.";  
+                    return;  
+                }  
+
+                if (validCredentials[username] === password) {  
+                    loginAttempts[username]++;  
+                    localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));  
+                    localStorage.setItem('username', username);  
+                    localStorage.setItem('role', userRole[username]);  
+                    localStorage.setItem('lastLogin', now.toISOString());  
+
+                    document.getElementById('sidebar-username').textContent = username;  
+                    document.getElementById('sidebar-password').textContent = password;  
+                    document.getElementById('sidebar-role').textContent = userRole[username];  
+
+                    toggleSidebar();  
+                } else {  
+                    errorElement.textContent = "Invalid username or password.";  
+                    loginAttempts[username] = (loginAttempts[username] || 0) + 1;  
+                    localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));  
+                }  
+            }  
+
+            function toggleSidebar() {  
+                const sidebar = document.getElementById('sidebar');  
+                sidebar.classList.toggle('open');  
+            }  
+        </script>  
+    </body>  
+    </html>
     <style>
         body {
             font-family: Arial, sans-serif;
