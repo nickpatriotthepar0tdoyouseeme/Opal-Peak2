@@ -341,7 +341,7 @@
         <a href="market.html">market</a>
         <a href="coupon.html">Redeem Center</a>
         <a href="https://tlk.io/opalpeak1" target="_blank">Chat</a>
-        <a href="gift_center.html">Gift center</a>
+        <a href="gift.html">Gift center</a>
     </div>
     <div id="sidebar" class="sidebar closed">
         <button class="menu-button" onclick="toggleSidebar()">☰</button>
@@ -617,6 +617,130 @@
     </script>
 </body>
 </html>
+    <!DOCTYPE html>  
+    <html lang="en">  
+    <head>  
+        <meta charset="UTF-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+        <title>Login Page with Update Popup</title>  
+        <style>  
+            body {  
+                font-family: Arial, sans-serif;  
+                display: flex;  
+                justify-content: center;  
+                align-items: center;  
+                height: 100vh;  
+                margin: 0;  
+                background-color: #f0f0f0;  
+                position: relative;  
+            }  
+            .login-container {  
+                background: #fff;  
+                padding: 20px;  
+                border-radius: 8px;  
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+                width: 300px;  
+                text-align: center;  
+            }  
+            input[type="text"], input[type="password"] {  
+                width: calc(100% - 20px);  
+                padding: 10px;  
+                margin: 10px 0;  
+                border: 1px solid #ddd;  
+                border-radius: 4px;  
+            }  
+            input[type="button"] {  
+                padding: 10px 20px;  
+                border: none;  
+                border-radius: 4px;  
+                background-color: #007bff;  
+                color: #fff;  
+                cursor: pointer;  
+            }  
+            input[type="button"]:hover {  
+                background-color: #0056b3;  
+            }  
+            .error {  
+                color: red;  
+                margin-top: 10px;  
+            }  
+            .popup {  
+                position: absolute;  
+                top: 20%;  
+                left: 50%;  
+                transform: translate(-50%, -50%);  
+                background: #fff;  
+                border: 1px solid #ddd;  
+                border-radius: 8px;  
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);  
+                padding: 20px;  
+                display: none;  
+                z-index: 1000;  
+            }  
+            .popup button {  
+                margin-top: 10px;  
+                padding: 10px;  
+                background: #28a745;  
+                color: white;  
+                border: none;  
+                border-radius: 5px;  
+                cursor: pointer;  
+            }  
+            .popup button:hover {  
+                background: #218838;  
+            }  
+        </style>  
+    </head>  
+    <body>  
+        <div class="login-container">  
+            <h2>Login</h2>  
+            <input type="text" id="username" placeholder="Username" />  
+            <input type="password" id="password" placeholder="Password" />  
+            <input type="button" value="Login" onclick="login()" />  
+            <div id="error" class="error"></div>  
+        </div>  
+        <div class="popup" id="updatePopup">  
+            <h4>Your version is old</h4>  
+            <p>Click to update</p>  
+            <button onclick="updateVersion()">Update</button>  
+        </div>  
+        <script>  
+            const updatePopup = document.getElementById('updatePopup');  
+            const isUpdateShown = localStorage.getItem('updateShown');  
+
+            if (!isUpdateShown) {  
+                updatePopup.style.display = 'block';  
+            }  
+
+            function login() {  
+                const username = document.getElementById('username').value;  
+                const password = document.getElementById('password').value;  
+                const errorElement = document.getElementById('error');  
+
+                // Sample login logic (for demonstration purposes)  
+                const validCredentials = {  
+                    "user": "pass"  
+                };  
+
+                if (validCredentials[username] === password) {  
+                    // Successful login logic  
+                } else {  
+                    errorElement.textContent = "Invalid username or password.";  
+                }  
+            }  
+
+            function updateVersion() {  
+                // Simulate an update process  
+                setTimeout(() => {  
+                    alert("Update successful!");  
+                    localStorage.setItem('updateShown', 'true'); // Store that the update message has been shown  
+                    updatePopup.style.display = 'none'; // Hide the popup  
+                }, 10000); // Wait for 10 seconds  
+            }  
+        </script>  
+    </body>  
+    </html>  
+
 
 
 </body>
