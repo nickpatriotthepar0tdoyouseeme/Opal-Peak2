@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Redemption</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('pic.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+        }
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Redeem Coupon</h1>
+        <div class="input-group">
+            <label for="couponCode">Coupon Code</label>
+            <input type="text" id="couponCode" placeholder="Enter coupon code">
+            <button class="button" id="redeemCoupon">Redeem Coupon</button>
+        </div>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        function displayMessage(message, success = true) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            messageElement.style.color = success ? 'green' : 'red';
+        }
+
+        document.getElementById('redeemCoupon').addEventListener('click', function() {
+            const couponCode = document.getElementById('couponCode').value.trim();
+            const username = localStorage.getItem('username');
+            let userCredits = parseInt(localStorage.getItem('credits'), 10) || 0;
+
+            if (!username) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (!couponCode) {
+                displayMessage('Please enter a coupon code.', false);
+                return;
+            }
+
+            const couponValues = {
+                'coupon1': 10,
+                'coupon2': 20,
+            };
+
+            if (couponValues[couponCode]) {
+                userCredits += couponValues[couponCode];
+                localStorage.setItem('credits', userCredits);
+                displayMessage(`Coupon redeemed! You've received ${couponValues[couponCode]} credits.`);
+            } else {
+                displayMessage('Invalid coupon code.', false);
+            }
+        });
+    </script>
+</body>
+</html>
