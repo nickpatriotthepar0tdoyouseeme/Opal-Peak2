@@ -321,5 +321,114 @@
         displayUserInfo();
         loadPosts();
     </script>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Version</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .update-box {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #updateButton {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        #updateButton.updating {
+            background-color: #0056b3;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .status-message {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your website version is old. Click to update.</h1>
+        <div class="update-box">
+            <button id="updateButton">Update to Paya [V 8.0.0]</button>
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to simulate the update process
+        document.getElementById('updateButton').addEventListener('click', function() {
+            const button = this;
+            const messageElement = document.getElementById('message');
+            const username = localStorage.getItem('username');
+            
+            if (!username) {
+                messageElement.textContent = 'User session not found.';
+                return;
+            }
+
+            button.classList.add('updating');
+            messageElement.textContent = 'Updating version... Please wait.';
+
+            // Simulate a 15-second update process
+            setTimeout(() => {
+                // Update local storage to reflect that the update was completed
+                localStorage.setItem(`updated_${username}`, 'true');
+                messageElement.innerHTML = `<span class="status-message">Successfully updated to Paya [V 8.0.0].</span>`;
+                button.disabled = true;
+            }, 15000); // 15 seconds
+        });
+
+        // Check if the user has already updated
+        function checkVersion() {
+            const username = localStorage.getItem('username');
+            if (username) {
+                const updated = localStorage.getItem(`updated_${username}`);
+                if (updated) {
+                    document.getElementById('message').innerHTML = `<span class="status-message">Your version is up to date (Paya [V 8.0.0]).</span>`;
+                    document.getElementById('updateButton').disabled = true;
+                }
+            }
+        }
+
+        // Run version check on page load
+        checkVersion();
+    </script>
+</body>
+</html>
+
 </body>
 </html>
